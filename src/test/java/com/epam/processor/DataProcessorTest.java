@@ -56,14 +56,14 @@ public class DataProcessorTest {
 
     @Test
     public void should_count_by_road_conditions7(){
-        Map<String, Long> countByRoadConditions = dataProcessor.getCountByRoadSurfaceCondition7();
+        Map<String, Integer> countByRoadConditions = dataProcessor.getCountByRoadSurfaceCondition7();
         assertThat(countByRoadConditions.get("Dry"), is(110277));
     }
 
     @Test
     public void should_count_by_road_conditions(){
         Map<String, Long> countByRoadConditions = dataProcessor.getCountByRoadSurfaceCondition();
-        assertThat(countByRoadConditions.get("Dry"), is(110277));
+        assertThat(countByRoadConditions.get("Dry"), is(110277L));
     }
 
     @Test
