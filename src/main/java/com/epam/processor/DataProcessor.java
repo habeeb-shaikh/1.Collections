@@ -34,16 +34,16 @@ public class DataProcessor {
 	 * @return
 	 */
 	public RoadAccident getAccidentByIndex7(String index) {
-		RoadAccident _RoadAccidentByIndex = null;
+		RoadAccident roadAccidentByIndex = null;
 		if (!"".equalsIgnoreCase(index)) {
-			for (RoadAccident _RoadAccident : roadAccidentList) {
-				if (index.equalsIgnoreCase("" + _RoadAccident.getAccidentId())) {
-					_RoadAccidentByIndex = _RoadAccident;
+			for (RoadAccident roadAccident : roadAccidentList) {
+				if (index.equalsIgnoreCase("" + roadAccident.getAccidentId())) {
+					roadAccidentByIndex = roadAccident;
 					break;
 				}
 			}
 		}
-		return _RoadAccidentByIndex;
+		return roadAccidentByIndex;
 	}
 
 	/**
@@ -57,15 +57,14 @@ public class DataProcessor {
 	 */
 	public Collection<RoadAccident> getAccidentsByLocation7(float minLongitude, float maxLongitude, float minLatitude,
 			float maxLatitude) {
-		Collection<RoadAccident> _AccidentsByLocation = new ArrayList<>();
-		for (RoadAccident _RoadAccident : roadAccidentList) {
-			if (isInSpecifiedRange(minLongitude, maxLongitude, _RoadAccident, true)
-					&& isInSpecifiedRange(minLatitude, maxLatitude, _RoadAccident, false)) {
-				_AccidentsByLocation.add(_RoadAccident);
+		Collection<RoadAccident> accidentsByLocation = new ArrayList<>();
+		for (RoadAccident roadAccident : roadAccidentList) {
+			if (isInSpecifiedRange(minLongitude, maxLongitude, minLatitude, maxLatitude, roadAccident)) {
+				accidentsByLocation.add(roadAccident);
 			}
-			_RoadAccident = null;
+			roadAccident = null;
 		}
-		return _AccidentsByLocation;
+		return accidentsByLocation;
 	}
 
 	/**
@@ -74,21 +73,21 @@ public class DataProcessor {
 	 * @return
 	 */
 	public Map<String, Integer> getCountByRoadSurfaceCondition7() {
-		Map<String, Integer> _CountByRoadSurfaceConditionMap = new HashMap<>();
-		Integer _Count = (int) 1;
-		String _RoadSurfaceMapKey;
+		Map<String, Integer> countByRoadSurfaceConditionMap = new HashMap<>();
+		Integer count = 1;
+		String roadSurfaceMapKey;
 		for (RoadAccident roadAccident : roadAccidentList) {
-			_RoadSurfaceMapKey = roadAccident.getRoadSurfaceConditions();
-			if (_CountByRoadSurfaceConditionMap.containsKey(_RoadSurfaceMapKey)) {
-				_Count = _CountByRoadSurfaceConditionMap.get(_RoadSurfaceMapKey);
-				_Count = _Count + 1;
-				_CountByRoadSurfaceConditionMap.put(_RoadSurfaceMapKey, _Count);
+			roadSurfaceMapKey = roadAccident.getRoadSurfaceConditions();
+			if (countByRoadSurfaceConditionMap.containsKey(roadSurfaceMapKey)) {
+				count = countByRoadSurfaceConditionMap.get(roadSurfaceMapKey);
+				count = count + 1;
+				countByRoadSurfaceConditionMap.put(roadSurfaceMapKey, count);
 			} else {
-				_CountByRoadSurfaceConditionMap.put(_RoadSurfaceMapKey, _Count);
+				countByRoadSurfaceConditionMap.put(roadSurfaceMapKey, count);
 			}
-			_RoadSurfaceMapKey = null;
+			roadSurfaceMapKey = null;
 		}
-		return _CountByRoadSurfaceConditionMap;
+		return countByRoadSurfaceConditionMap;
 	}
 
 	/**
@@ -101,26 +100,26 @@ public class DataProcessor {
 	 */
 	public List<String> getTopThreeWeatherCondition7() {
 
-		List<String> _Top3WeatherList = new ArrayList<String>();
-		Map<String, Integer> _WeatherCondMap = getWeatherCondition7();
-		List<Integer> _WeatherCondList = new ArrayList<Integer>(_WeatherCondMap.values());
-		Collections.sort(_WeatherCondList, Collections.reverseOrder());
-		List<Integer> _TopThreeWeathersList = _WeatherCondList.subList(0, 3);
-		Set<String> _WeatherCondSet = _WeatherCondMap.keySet();
+		List<String> top3WeatherList = new ArrayList<String>();
+		Map<String, Integer> weatherCondMap = getWeatherCondition7();
+		List<Integer> weatherCondList = new ArrayList<Integer>(weatherCondMap.values());
+		Collections.sort(weatherCondList, Collections.reverseOrder());
+		List<Integer> topThreeWeathersList = weatherCondList.subList(0, 3);
+		Set<String> weatherCondSet = weatherCondMap.keySet();
 		Integer count = 0;
-		for (String _WeatherCond : _WeatherCondSet) {
-			count = _WeatherCondMap.get(_WeatherCond);
-			for (Integer _TopThreeWeather : _TopThreeWeathersList) {
-				if (_TopThreeWeather == count) {
-					_Top3WeatherList.add(_WeatherCond);
+		for (String weatherCond : weatherCondSet) {
+			count = weatherCondMap.get(weatherCond);
+			for (Integer topThreeWeather : topThreeWeathersList) {
+				if (topThreeWeather == count) {
+					top3WeatherList.add(weatherCond);
 				}
 			}
 		}
-		_WeatherCondList = null;
-		_WeatherCondMap = null;
-		_TopThreeWeathersList = null;
-		_WeatherCondSet = null;
-		return _Top3WeatherList;
+		weatherCondList = null;
+		weatherCondMap = null;
+		topThreeWeathersList = null;
+		weatherCondSet = null;
+		return top3WeatherList;
 
 	}
 
@@ -132,29 +131,29 @@ public class DataProcessor {
 	 */
 	public Multimap<String, String> getAccidentIdsGroupedByAuthority7() {
 
-		ListMultimap<String, String> _AccidentIdsGroupedByAuthorityMap = ArrayListMultimap.create();
-		String _RoadSurfaceMapKey;
-		String _Accidents;
+		ListMultimap<String, String> accidentIdsGroupedByAuthorityMap = ArrayListMultimap.create();
+		String roadSurfaceMapKey;
+		String accidents;
 		for (RoadAccident roadAccident : roadAccidentList) {
-			_RoadSurfaceMapKey = (roadAccident.getDistrictAuthority());
-			_Accidents = roadAccident.getAccidentId();
-			_AccidentIdsGroupedByAuthorityMap.put(_RoadSurfaceMapKey, _Accidents);
-			_RoadSurfaceMapKey = null;
-			_Accidents = null;
+			roadSurfaceMapKey = (roadAccident.getDistrictAuthority());
+			accidents = roadAccident.getAccidentId();
+			accidentIdsGroupedByAuthorityMap.put(roadSurfaceMapKey, accidents);
+			roadSurfaceMapKey = null;
+			accidents = null;
 		}
-		return _AccidentIdsGroupedByAuthorityMap;
+		return accidentIdsGroupedByAuthorityMap;
 	}
 
 	// Now let's do same tasks but now with streaming api
 
 	public RoadAccident getAccidentByIndex(String index) {
 
-		RoadAccident _RoadAccident;
+		RoadAccident roadAccident;
 
-		_RoadAccident = roadAccidentList.stream() // Convert to steam
-				.filter(_RoadAccidentByIndex -> index.equals(_RoadAccidentByIndex.getAccidentId())).findAny() 
+		roadAccident = roadAccidentList.stream() // Convert to steam
+				.filter(roadAccidentByIndex -> index.equals(roadAccidentByIndex.getAccidentId())).findAny()
 				.orElse(null);
-		return _RoadAccident;
+		return roadAccident;
 	}
 
 	/**
@@ -168,17 +167,18 @@ public class DataProcessor {
 	 */
 	public Collection<RoadAccident> getAccidentsByLocation(float minLongitude, float maxLongitude, float minLatitude,
 			float maxLatitude) {
-		
-		
-		Collection<RoadAccident> _AccidentsByLocation = new ArrayList<>();
-		
-		_AccidentsByLocation = (Collection<RoadAccident>) roadAccidentList.stream()
-		.filter( roadAccident -> minLongitude < roadAccident.getLongitude()  && maxLongitude > roadAccident.getLongitude())
-		.filter( roadAccident -> minLatitude < roadAccident.getLatitude()  && maxLatitude > roadAccident.getLatitude())
-		.collect(Collectors.toList());	
-		
-		return _AccidentsByLocation;
-		
+
+		Collection<RoadAccident> accidentsByLocation = new ArrayList<>();
+
+		accidentsByLocation = (Collection<RoadAccident>) roadAccidentList.stream()
+				.filter(roadAccident -> minLongitude < roadAccident.getLongitude()
+						&& maxLongitude > roadAccident.getLongitude())
+				.filter(roadAccident -> minLatitude < roadAccident.getLatitude()
+						&& maxLatitude > roadAccident.getLatitude())
+				.collect(Collectors.toList());
+
+		return accidentsByLocation;
+
 	}
 
 	/**
@@ -187,15 +187,14 @@ public class DataProcessor {
 	 * @return
 	 */
 	public List<String> getTopThreeWeatherCondition() {
-		List<String> _Top3WeatherList = new ArrayList<String>();
-		
-		_Top3WeatherList = roadAccidentList.stream()
-		.collect(Collectors.groupingBy(RoadAccident::getWeatherConditions,Collectors.counting()))
-		.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(3)
-		.map(RoadAccident -> RoadAccident.getKey()).collect(Collectors.toList());
-  
-		
-		return _Top3WeatherList;
+		List<String> top3WeatherList = new ArrayList<String>();
+
+		top3WeatherList = roadAccidentList.stream()
+				.collect(Collectors.groupingBy(RoadAccident::getWeatherConditions, Collectors.counting())).entrySet()
+				.stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(3)
+				.map(RoadAccident -> RoadAccident.getKey()).collect(Collectors.toList());
+
+		return top3WeatherList;
 	}
 
 	/**
@@ -205,12 +204,12 @@ public class DataProcessor {
 	 */
 	public Map<String, Long> getCountByRoadSurfaceCondition() {
 
-		Map<String, Long> _CountByRoadSurfaceConditionMap = new HashMap<>();
-		
-		_CountByRoadSurfaceConditionMap = roadAccidentList.stream()
-				.collect(Collectors.groupingBy(RoadAccident::getRoadSurfaceConditions,Collectors.counting()));
-		
-		return   _CountByRoadSurfaceConditionMap;
+		Map<String, Long> countByRoadSurfaceConditionMap = new HashMap<>();
+
+		countByRoadSurfaceConditionMap = roadAccidentList.stream()
+				.collect(Collectors.groupingBy(RoadAccident::getRoadSurfaceConditions, Collectors.counting()));
+
+		return countByRoadSurfaceConditionMap;
 	}
 
 	/**
@@ -220,55 +219,48 @@ public class DataProcessor {
 	 * @return
 	 */
 	public Map<String, List<String>> getAccidentIdsGroupedByAuthority() {
-		
-		
-		Map<String, List<String>> _AccidentIdsGroupedByAuthorityMap = new HashMap<>();
-		
-		_AccidentIdsGroupedByAuthorityMap = roadAccidentList.stream()
+
+		Map<String, List<String>> accidentIdsGroupedByAuthorityMap = new HashMap<>();
+
+		accidentIdsGroupedByAuthorityMap = roadAccidentList.stream()
 				.collect(Collectors.groupingBy(RoadAccident::getDistrictAuthority,
-						Collectors.mapping(RoadAccident::getAccidentId,Collectors.toList())));
-		return _AccidentIdsGroupedByAuthorityMap;
+						Collectors.mapping(RoadAccident::getAccidentId, Collectors.toList())));
+		return accidentIdsGroupedByAuthorityMap;
 	}
 
 	/**
 	 * This method verifies range of location
 	 * 
-	 * @param _MinValue
-	 * @param _MaxValue
-	 * @param _RoadAccident
+	 * @param minValue
+	 * @param maxValue
+	 * @param roadAccident
 	 * @return true when in range other wise false
 	 */
-	private boolean isInSpecifiedRange(float _MinValue, float _MaxValue, RoadAccident _RoadAccident,
-			boolean _Longitude) {
-		boolean _IsInRange = false;
-		if (_Longitude) {
-			if (_MinValue < _RoadAccident.getLongitude() && _MaxValue > _RoadAccident.getLongitude()) {
-				_IsInRange = true;
-			}
-		} else {
-			if (_MinValue < _RoadAccident.getLatitude() && _MaxValue > _RoadAccident.getLatitude()) {
-				_IsInRange = true;
-			}
+	private boolean isInSpecifiedRange(float minLongitude, float maxLongitude, float minLatitude, float maxLatitude,
+			RoadAccident roadAccident) {
+		boolean isInRange = false;
+		if (minLongitude < roadAccident.getLongitude() && maxLongitude > roadAccident.getLongitude()
+				&& minLatitude < roadAccident.getLatitude() && maxLatitude > roadAccident.getLatitude()) {
+			isInRange = true;
 		}
-
-		return _IsInRange;
+		return isInRange;
 	}
 
 	public Map<String, Integer> getWeatherCondition7() {
-		Map<String, Integer> _CountByWeatherConditionMap = new HashMap<>();
-		Integer _Count = 1;
-		String _WeatherCondMapKey;
+		Map<String, Integer> countByWeatherConditionMap = new HashMap<>();
+		Integer count = 1;
+		String weatherCondMapKey;
 		for (RoadAccident roadAccident : roadAccidentList) {
-			_WeatherCondMapKey = (roadAccident.getWeatherConditions());
-			if (_CountByWeatherConditionMap.containsKey(_WeatherCondMapKey)) {
-				_Count = _CountByWeatherConditionMap.get(_WeatherCondMapKey);
-				_Count = _Count + 1;
-				_CountByWeatherConditionMap.put(_WeatherCondMapKey, _Count);
-				_Count = 0;
+			weatherCondMapKey = (roadAccident.getWeatherConditions());
+			if (countByWeatherConditionMap.containsKey(weatherCondMapKey)) {
+				count = countByWeatherConditionMap.get(weatherCondMapKey);
+				count = count + 1;
+				countByWeatherConditionMap.put(weatherCondMapKey, count);
+				count = 0;
 			} else {
-				_CountByWeatherConditionMap.put(_WeatherCondMapKey, _Count);
+				countByWeatherConditionMap.put(weatherCondMapKey, count);
 			}
 		}
-		return _CountByWeatherConditionMap;
+		return countByWeatherConditionMap;
 	}
 }
