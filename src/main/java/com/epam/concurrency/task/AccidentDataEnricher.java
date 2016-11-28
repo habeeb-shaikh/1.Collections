@@ -4,6 +4,13 @@ import com.epam.data.RoadAccident;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Tanmoy on 6/16/2016.
@@ -23,7 +30,8 @@ public class AccidentDataEnricher {
 
     public RoadAccidentDetails enrichRoadAccidentDataItem(RoadAccident roadAccident){
         RoadAccidentDetails roadAccidentDetails = new RoadAccidentDetails(roadAccident);
-        enrichPoliceForceContactSynchronously(roadAccidentDetails);
+//        enrichPoliceForceContactSynchronously(roadAccidentDetails);
+        enrichPoliceForceContactAsynchronously(roadAccidentDetails);
         /**
          * above call might get blocked causing the application to get stuck
          *
@@ -42,5 +50,39 @@ public class AccidentDataEnricher {
 
     private void enrichPoliceForceContactAsynchronously(RoadAccidentDetails roadAccidentDetails){
         //use policeForceService.getContactNoWithDelay
+    	
+//    	String policeForceContact = policeForceService.getContactNoWithDelay(roadAccidentDetails.getPoliceForce());
+//        roadAccidentDetails.setPoliceForceContact(policeForceContact);
+//        
+//        ExecutorService executor = Executors.newSingleThreadExecutor();
+//        executor.submit(() -> {
+//            String threadName = Thread.currentThread().getName();
+//            String policeForceContact = policeForceService.getContactNoWithDelay(roadAccidentDetails.getPoliceForce());
+//	        roadAccidentDetails.setPoliceForceContact(policeForceContact);
+//	        
+//            System.out.println("Hello " + threadName);
+//        });
+
+        
+        ExecutorService executor = Executors.newCachedThreadPool();
+        Callable<Object> task = new Callable<Object>() {
+           public Object call() {
+        	   String policeForceContact = policeForceService.getContactNoWithDelay(roadAccidentDetails.getPoliceForce());
+   	           roadAccidentDetails.setPoliceForceContact(policeForceContact);
+   	           return null;
+           }
+        };
+        Future<Object> future = executor.submit(task);
+        try {
+           Object result = future.get(30, TimeUnit.SECONDS); 
+        } catch (TimeoutException ex) {
+           // handle the timeout
+        } catch (InterruptedException e) {
+           // handle the interrupts
+        } catch (ExecutionException e) {
+           // handle other exceptions
+        } finally {
+           future.cancel(true); // may or may not desire this
+        }
     }
 }

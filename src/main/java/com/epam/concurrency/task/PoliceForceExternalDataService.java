@@ -61,8 +61,8 @@ public class PoliceForceExternalDataService {
     public static void main(String[] args) {
         PoliceForceExternalDataService ps = new PoliceForceExternalDataService();
         for (String forceName: ps.forceMap.keySet() ) {
-            System.out.println("fetching contact no for " + ps.getContactNoWithoutDelay(forceName));
-            ps.getContactNoWithoutDelay(forceName);
+            System.out.println("fetching contact no for " + ps.getContactNoWithDelay(forceName));
+            ps.getContactNoWithDelay(forceName);
         }
     }
 }
