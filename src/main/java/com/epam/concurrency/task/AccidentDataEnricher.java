@@ -30,8 +30,8 @@ public class AccidentDataEnricher {
 
     public RoadAccidentDetails enrichRoadAccidentDataItem(RoadAccident roadAccident){
         RoadAccidentDetails roadAccidentDetails = new RoadAccidentDetails(roadAccident);
-//        enrichPoliceForceContactSynchronously(roadAccidentDetails);
-        enrichPoliceForceContactAsynchronously(roadAccidentDetails);
+        enrichPoliceForceContactSynchronously(roadAccidentDetails);
+//        enrichPoliceForceContactAsynchronously(roadAccidentDetails);
         /**
          * above call might get blocked causing the application to get stuck
          *
@@ -51,18 +51,8 @@ public class AccidentDataEnricher {
     private void enrichPoliceForceContactAsynchronously(RoadAccidentDetails roadAccidentDetails){
         //use policeForceService.getContactNoWithDelay
     	
-//    	String policeForceContact = policeForceService.getContactNoWithDelay(roadAccidentDetails.getPoliceForce());
-//        roadAccidentDetails.setPoliceForceContact(policeForceContact);
-//        
-//        ExecutorService executor = Executors.newSingleThreadExecutor();
-//        executor.submit(() -> {
-//            String threadName = Thread.currentThread().getName();
-//            String policeForceContact = policeForceService.getContactNoWithDelay(roadAccidentDetails.getPoliceForce());
-//	        roadAccidentDetails.setPoliceForceContact(policeForceContact);
-//	        
-//            System.out.println("Hello " + threadName);
-//        });
-
+    	String policeForceContact = policeForceService.getContactNoWithDelay(roadAccidentDetails.getPoliceForce());
+        roadAccidentDetails.setPoliceForceContact(policeForceContact);
         
         ExecutorService executor = Executors.newCachedThreadPool();
         Callable<Object> task = new Callable<Object>() {
