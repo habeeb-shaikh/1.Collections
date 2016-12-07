@@ -41,3 +41,16 @@ Below task is optional if somebody is interested to play with more.
 For more complicated scenario change to use PoliceForceExternalDataService.getContactNoWithDelay() from enricher to
 simulate the scenario that enrichment from 3rd party service may get stuck. As a solution this can be run in a separate
 thread and the result should be returned using Future with a timeout
+
+## Hometask 3
+In this assignment you have to cover the code introduced in previous home task with tests. 
+Feel free to cover both your own code or code provided to you as a part of home task 2.
+
+### Stick to these requirements:
+1. There should be **at least 3** tests implemented. The more tests you implement - the better, but please remember to avoid redundant tests. Test coverage will be taken into consideration for final projects evaluation. You can use your IDE/plugin to measure that.  
+2. Make use of Hamcrest matchers in your tests
+3. Use Mockito in your unit tests (or [PowerMock](https://github.com/powermock/powermock/wiki/MockitoUsage), which overcomes Mockito limitations): 
+  * mock() dependecies of tested component
+  * provide at least one stub with when()
+  * verify() behavior at least once
+4. Write at least one integration test, without mocking (hint: you may consider testing file writing functionality)
