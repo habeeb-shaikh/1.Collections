@@ -43,7 +43,7 @@ public class AccidentDataProcessor {
 		accidentDataWriter.init(OUTPUT_FILE_PATH);
 	}
 
-	public void process() throws InterruptedException {
+		public void process() throws InterruptedException {
 		for (String accidentDataFile : fileQueue) {
 			log.info("Starting to process {} file ", accidentDataFile);
 			accidentDataReader.init(DATA_PROCESSING_BATCH_SIZE, accidentDataFile);
@@ -127,5 +127,12 @@ public class AccidentDataProcessor {
 		long end = System.currentTimeMillis();
 		System.out.println("Process finished in s : " + (end - start) / 1000);
 	}
-
+	public List<String> getFileQueue() {
+		return fileQueue;
+	}
+	public int  getDataProcessBatchSize()
+	{
+		return DATA_PROCESSING_BATCH_SIZE;	
+	}
+     
 }

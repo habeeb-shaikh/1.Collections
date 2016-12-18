@@ -22,7 +22,7 @@ public class RoadAccident {
     private String weatherConditions;
     private String roadSurfaceConditions;
 
-    RoadAccident(RoadAccidentBuilder builder){
+    public RoadAccident(RoadAccidentBuilder builder){
         this.accidentId = builder.accidentId;
         this.longitude = builder.longitude;
         this.latitude = builder.latitude;

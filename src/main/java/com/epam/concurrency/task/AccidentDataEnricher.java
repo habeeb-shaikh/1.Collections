@@ -43,12 +43,12 @@ public class AccidentDataEnricher {
         return  roadAccidentDetails;
     }
 
-    private void enrichPoliceForceContactSynchronously(RoadAccidentDetails roadAccidentDetails){
+    public void enrichPoliceForceContactSynchronously(RoadAccidentDetails roadAccidentDetails){
         String policeForceContact = policeForceService.getContactNoWithoutDelay(roadAccidentDetails.getPoliceForce());
         roadAccidentDetails.setPoliceForceContact(policeForceContact);
     }
 
-    private void enrichPoliceForceContactAsynchronously(RoadAccidentDetails roadAccidentDetails){
+    public void enrichPoliceForceContactAsynchronously(RoadAccidentDetails roadAccidentDetails){
         //use policeForceService.getContactNoWithDelay
     	
     	String policeForceContact = policeForceService.getContactNoWithDelay(roadAccidentDetails.getPoliceForce());
